@@ -1,0 +1,59 @@
+@font-face {
+    font-family: "CustomFont";
+    src: url("Norse-Bold.otf") format("opentype");
+}
+
+body {
+    font-family: "CustomFont";
+    background-color: #CAF0F8;
+    margin: 0;
+    color: #03045E;
+}
+
+header {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: #00B4D8;
+    
+    border-radius: 0 0 20px 20px;
+}
+
+header .logo {
+    font-size: 30px;
+}
+
+header .addbook {
+    width: 100px;
+    font-size: 20px;
+}
+
+button{
+    font-family: "CustomFont";
+    color: #03045E;
+    font-size: 20px;
+    border: none;
+    background-color: #90E0EF;
+    padding: 5px;
+    border-radius: 15px;
+}
+
+#card-container {
+    display: grid;
+    gap: 10px;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+.card {
+    background-color: #0077B6;
+    border: 1px solid #ccc;
+    padding: 15px;
+    margin: 10px;
+    border-radius: 10px;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.311);
+    font-size: 20px;
+    display: grid;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+}
