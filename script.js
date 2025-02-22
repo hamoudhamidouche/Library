@@ -1,99 +1,112 @@
-const dialog = document.querySelector("dialog");
-const showButton = document.querySelector("dialog + button");
-const closeButton = document.querySelector("dialog button");
-const addbtn = document.querySelector(".sub");
-let inpname = document.querySelector("#name");
-let inpauth = document.querySelector("#author");
-let inpnpages = document.querySelector("#pages");
-let inpsta = document.querySelector("#status");
+const myLibrary = [];
 
-const myLibrary = []; // Declare this before usage
+class Book {
+  constructor(name, auth, pages, read) {
+    this.name = name;
+    this.auth = auth;
+    this.pages = pages;
+    this.read = read;
+  }
+}
 
-// "Show the dialog" button opens the dialog modally
-showButton.addEventListener("click", () => {
-  dialog.showModal();
-});
-
-// "Close" button closes the dialog
-closeButton.addEventListener("click", () => {
-  dialog.close();
-});
-
-// Add book to library
-addbtn.addEventListener("click", () => {
-  let bookname = inpname.value.trim();
-  let bookauth = inpauth.value.trim();
-  let pages = parseInt(inpnpages.value.trim());
-  let bookstatus = inpsta.value.trim() || "not read";
-
-  // Validate input before adding
-  if (bookname === "" || inpauth === "" || isNaN(pages) || pages <= 0) {
-    alert("Please enter valid book details.");
-    return;
+class Card {
+  constructor(book) {
+    this.book = book;
   }
 
-  addBookToLibrary(bookname, bookauth, pages, bookstatus);
-  
-  // Reset input fields
-  inpname.value = "";
-  inpauth.value = "";
-  inpnpages.value = "";
-  inpsta.value = "";
+  createCard() {
+    myLibrary.push(this.book);
 
-  dialog.close();
-});
+    const container = document.querySelector("#card-container");
+    const card = document.createElement("div");
+    card.classList.add("card");
 
-function Book(name, auth, pages, read) {
-  this.name = name;
-  this.auth = auth,
-  this.pages = pages;
-  this.read = read;
+    const title = document.createElement("p");
+    title.textContent = "Name: " + this.book.name;
+
+    const author = document.createElement("p");
+    author.textContent = "Author: " + this.book.auth;
+
+    const pagesElement = document.createElement("p");
+    pagesElement.textContent = "Pages: " + this.book.pages;
+
+    const status = document.createElement("p");
+    status.textContent = "Status: " + this.book.read;
+
+    const btn1 = document.createElement("button");
+    btn1.classList.add("switch");
+    btn1.textContent = "Switch status";
+
+    const btn2 = document.createElement("button");
+    btn2.classList.add("delete");
+    btn2.textContent = "Delete";
+
+    // Event Listeners
+    btn1.addEventListener("click", () => {
+      this.book.read = this.book.read === "read" ? "not read" : "read";
+      status.textContent = "Status: " + this.book.read;
+    });
+
+    btn2.addEventListener("click", () => {
+      container.removeChild(card);
+      myLibrary.splice(myLibrary.indexOf(this.book), 1);
+    });
+
+    card.appendChild(title);
+    card.appendChild(author);
+    card.appendChild(pagesElement);
+    card.appendChild(status);
+    card.appendChild(btn1);
+    card.appendChild(btn2);
+    container.appendChild(card);
+  }
 }
 
-function addBookToLibrary(name, auth, pages, read) {
-  let book = new Book(name, auth, pages, read);
-  myLibrary.push(book);
+class workFlow {
+  constructor() {
+    this.dialog = document.querySelector("dialog");
+    this.showButton = document.querySelector("dialog + button");
+    this.closeButton = document.querySelector("dialog button");
+    this.addbtn = document.querySelector(".sub");
+    this.inpname = document.querySelector("#name");
+    this.inpauth = document.querySelector("#author");
+    this.inpnpages = document.querySelector("#pages");
+    this.inpsta = document.querySelector("#status");
 
-  const container = document.querySelector("#card-container");
-  const card = document.createElement("div");
-  card.classList.add("card");
+    this.showButton.addEventListener("click", () => {
+      this.dialog.showModal();
+    });
 
-  const title = document.createElement("p");
-  title.textContent = "Name : " + book.name;
+    this.closeButton.addEventListener("click", () => {
+      this.dialog.close();
+    });
 
-  const author = document.createElement("p");
-  author.textContent = "Author : " + book.auth;
+    this.addbtn.addEventListener("click", () => this.addToLibrary());
+  }
 
-  const pagesElement = document.createElement("p"); // Avoid variable conflict
-  pagesElement.textContent = "Pages : " + book.pages;
+  addToLibrary() {
+    let bookname = this.inpname.value.trim();
+    let bookauth = this.inpauth.value.trim();
+    let pages = parseInt(this.inpnpages.value.trim());
+    let bookstatus = this.inpsta.value.trim() || "not read";
 
-  const status = document.createElement("p");
-  status.textContent = "Status : " + book.read;
+    if (bookname === "" || bookauth === "" || isNaN(pages) || pages <= 0) {
+      alert("Please enter valid book details.");
+      return;
+    }
 
-  const btn1 = document.createElement("button");
-  btn1.classList.add("switch");
-  btn1.textContent = "Switch status";
+    let newBook = new Book(bookname, bookauth, pages, bookstatus);
+    new Card(newBook).createCard();
 
-  const btn2 = document.createElement("button");
-  btn2.classList.add("delete");
-  btn2.textContent = "Delete";
+    // Reset input fields
+    this.inpname.value = "";
+    this.inpauth.value = "";
+    this.inpnpages.value = "";
+    this.inpsta.value = "";
 
-  // Add event listeners to buttons
-  btn1.addEventListener("click", () => {
-    book.read = book.read === "read" ? "not read" : "read";
-    status.textContent = "Status : " + book.read;
-  });
-
-  btn2.addEventListener("click", () => {
-    container.removeChild(card);
-    myLibrary.splice(myLibrary.indexOf(book), 1);
-  });
-
-  card.appendChild(title);
-  card.appendChild(author);
-  card.appendChild(pagesElement);
-  card.appendChild(status);
-  card.appendChild(btn1);
-  card.appendChild(btn2);
-  container.appendChild(card);
+    this.dialog.close();
+  }
 }
+
+// Instantiate workFlow
+new workFlow();
